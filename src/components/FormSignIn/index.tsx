@@ -1,22 +1,25 @@
 import React, { FormEvent, useCallback, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import Lottie from 'react-lottie';
 
 import { toast } from 'react-toastify';
 
 import api from '../../service/api';
+import * as animationData from '../../assets/animation/60347-loader.json';
+// import * as anim...
 
-interface IUserRegister{
-  cpf: string;
-  nome: string;
-  login: string;
+import { FormContent } from './style'
+
+interface IUserLogin{
+  usuario: string;
   senha: string;  
 }
 
-const FormSignUp: React.FC = () => {
+const FormSignIn: React.FC = () => {
   
 const history = useHistory()  
 
-  const [formDataContent, setFormDataContent] = useState<IUserRegister>({} as IUserRegister);
+  const [formDataContent, setFormDataContent] = useState<IUserLogin>({} as IUserLogin);
   const [isLoad, setIsLoad] = useState<boolean>(false);
 
   const handleSubmit = useCallback(
@@ -24,10 +27,11 @@ const history = useHistory()
       e.preventDefault();
       setIsLoad(true)
       
-      api.post('usuarios', formDataContent).then(
+      api.post('login', formDataContent).then(
         response => {
+          localStorage.setItem('@tokenAfyaApp', response.data.token)
           toast.success('cadastro realizado com sucesso!', {
-            onClose: () => history.push('/login')
+            onClose: () => history.push('/dash')
           })
         }
       ).catch( e => toast.error('Algo deu errado!'))
@@ -35,48 +39,48 @@ const history = useHistory()
 
     }, [formDataContent, history]
   );
+
+const animationContent = {
+  loop: true,
+  autoplay: true,
+  animationData: animationData
+}
+
   return (
-    <div>
+    <FormContent>
+
       {/* { isLoad && (<p>Carregando</p>)} */}
       { isLoad ? (
-        <p>Carregando</p>
+        <Lottie 
+          options={animationContent}
+          width={200}
+          height={200}
+          />
       ) : (
           
         <form onSubmit={ handleSubmit}>
-          <input
-            type="text"
-            name="name"
-            placeholder="Insira seu nome" 
-            onChange={ e => setFormDataContent({...formDataContent, nome: e.target.value}) }
-          />
-          <input 
-            type="text" 
-            name="username"
-            placeholder="Insira seu nome de usuário" 
-            onChange={ e => setFormDataContent({...formDataContent, login: e.target.value}) }
-          />
 
           <input 
             type="text" 
-            name="username"
-            placeholder="Informe seu cpf" 
-            onChange={ e => setFormDataContent({...formDataContent, cpf: e.target.value}) }
+            name="name"
+            placeholder="Insira seu nome de usuário" 
+            onChange={ e => setFormDataContent({...formDataContent, usuario: e.target.value}) }
           />
 
           <input 
             type="password"
             name="password"
-            placeholder="Insira sua senha"
+            placeholder="Senha"
             onChange={ e => setFormDataContent({...formDataContent, senha: e.target.value}) }
           />
           
           <input
             type="submit"
-            value="Criar Conta" />
+            value="Logar" />
         </form>
       )}   
-    </div>
+    </FormContent>
   )
 }
 
-export default FormSignUp;
+export default FormSignIn;
