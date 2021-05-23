@@ -5,7 +5,7 @@ import PrivateRoutes from './private.routes';
 import Home from './views/pages/Home';
 import Login from './views/pages/Login';
 import SignUp from './views/pages/SignUp';
-import Dash from './views/pages/Dash'
+import Dash from './views/pages/Dash';
 
 const Routes: React.FC = () => {
   return (

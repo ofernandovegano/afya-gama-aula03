@@ -7,16 +7,16 @@ import { toast } from 'react-toastify';
 import api from '../../service/api';
 import animationData from '../../assets/animation/60347-loader.json';
 
-import { FormContent } from './style'
+import { FormContent } from './style';
 
-interface IUserLogin{
+interface IUserLogin {
   usuario: string;
-  senha: string;  
+  senha: string;
 }
 
 const FormSignIn: React.FC = () => {
-  
-const history = useHistory()  
+
+  const history = useHistory()
 
   const [formDataContent, setFormDataContent] = useState<IUserLogin>({} as IUserLogin);
   const [isLoad, setIsLoad] = useState<boolean>(false);
@@ -25,61 +25,58 @@ const history = useHistory()
     (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       setIsLoad(true)
-      
+
       api.post('login', formDataContent).then(
         response => {
           localStorage.setItem('@tokenAfyaApp', response.data.token)
-          toast.success('cadastro realizado com sucesso!', {
+          toast.success('Cadastro realizado com sucesso! Você está sendo redirecionado', {
             onClose: () => history.push('/dash')
           })
         }
-      ).catch( e => toast.error('Algo deu errado!'))
-      .finally(() => setIsLoad(false))
-
+      )
+        .catch( e => toast.error('Algo deu errado'))
+        .finally( () => setIsLoad(false))
+      
     }, [formDataContent, history]
   );
 
-const animationContent = {
-  loop: true,
-  autoplay: true,
-  animationData: animationData
-}
+  const animationContent = {
+    loop: true,
+    autoplay: true,
+    animationData: animationData
+  }
 
   return (
     <FormContent>
-
-      {/* { isLoad && (<p>Carregando</p>)} */}
       { isLoad ? (
-        <Lottie 
+        <Lottie
           options={animationContent}
           width={200}
           height={200}
-          />
+        />
       ) : (
-          
-        <form onSubmit={ handleSubmit}>
-
-          <input 
-            type="text" 
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
             name="name"
-            placeholder="Insira seu nome de usuário" 
-            onChange={ e => setFormDataContent({...formDataContent, usuario: e.target.value}) }
+            placeholder="Insira seu nome de usuário"
+            onChange={e => setFormDataContent({ ...formDataContent, usuario: e.target.value })}
           />
-
-          <input 
+          <input
             type="password"
             name="password"
             placeholder="Senha"
-            onChange={ e => setFormDataContent({...formDataContent, senha: e.target.value}) }
+            onChange={e => setFormDataContent({ ...formDataContent, senha: e.target.value })}
           />
-          
+         
           <input
             type="submit"
-            value="Logar" />
+            value="Logar"
+          />
         </form>
-      )}   
+      )}
     </FormContent>
-  )
+  );
 }
 
 export default FormSignIn;
