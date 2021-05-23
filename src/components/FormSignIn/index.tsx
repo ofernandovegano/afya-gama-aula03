@@ -5,8 +5,9 @@ import Lottie from 'react-lottie';
 import { toast } from 'react-toastify';
 
 import api from '../../service/api';
-import * as animationData from '../../assets/animation/60347-loader.json';
-// import * as anim...
+import animationData from '../../assets/animation/60347-loader.json';
+// import * as animationData from '../../assets/animation/60347-loader.json';
+// { ReactComponent as AnimationData }
 
 import { FormContent } from './style'
 
